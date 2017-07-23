@@ -1,17 +1,21 @@
 ## Unity Notes Asset  
 
-To make a note, add the NotesBehaviour.cs to any GameObject.
+#### Usage
+
+**1)** Add NotesBehaviour.cs to any GameObject in the scene and write your notes.
 
 ![](https://github.com/0x4d4147/readme-images/blob/master/NotesForUnity/Screen%20Shot%202017-07-22%20at%2011.40.10%20PM.png?raw=true)  
 
 ![](https://github.com/0x4d4147/readme-images/blob/master/NotesForUnity/Screen%20Shot%202017-07-22%20at%2011.51.17%20PM.png?raw=true)
 
-You can view all notes by going to "Window/Gather Notes" and selecting "Refresh Notes." This will list all notes in the scene. Clicking on a note in the "Gather Notes" window will select the object in the scene and highlight in the hierarchy.
-
+**2)** Go to "Window/Gather Notes" and click the "Refresh Notes" button to gather all notes in the scene.  
 
 ![](https://github.com/0x4d4147/readme-images/blob/master/NotesForUnity/Screen%20Shot%202017-07-22%20at%2011.51.51%20PM.png?raw=true)  
 
 ![](https://github.com/0x4d4147/readme-images/blob/master/NotesForUnity/Screen%20Shot%202017-07-22%20at%2011.51.40%20PM.png?raw=true)  
+
+**3)** Click on any note in the window to ping select the object with the note.  
+
 
 ## Releases  
 
