@@ -1,12 +1,12 @@
 # Notes for Unity  
 
-![](https://github.com/0x4d4147/readme-images/blob/master/NotesForUnity/noteforunity-with-colors.JPG?raw=true)  
+![Example image](https://github.com/0x4d4147/readme-images/blob/master/NotesForUnity/noteforunity-with-colors.JPG?raw=true)  
 
-#### Usage  
+### Usage  
 
-**1)** Add NotesBehaviour.cs to any GameObject in the scene and write your notes.  
-**2)** Go to "Window/Gather Notes" and click the "Refresh Notes" button to gather all notes in the scene.  
-**3)** Click on any note in the window to ping select the object with the note.  
+**1)** Add a _NoteBehaviour_ Component to any GameObject in the scene, and enter some notes.  
+**2)** Open _'Window > Gather Notes'_ in Unity's toolbar. Click the "Refresh Notes" button to gather all notes in the scene.  
+**3)** Click on any note in the _'Gather Notes'_ window to select the object in the scene and ping the object in the hierarchy.  
 
 ## Releases  
 
