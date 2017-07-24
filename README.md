@@ -5,7 +5,7 @@
 ### Usage  
 
 **1)** Add a _NoteBehaviour_ Component to any GameObject in the scene, and enter some notes.  
-**2)** Open _'Window > Gather Notes'_ in Unity's toolbar. Click the "Refresh Notes" button to gather all notes in the scene.  
+**2)** Open _'Window > Gather Notes'_ in Unity's toolbar. Click the _'Refresh Notes'_ button to gather all notes in the scene.  
 **3)** Click on any note in the _'Gather Notes'_ window to select the object in the scene and ping the object in the hierarchy.  
 
 ## Releases  
