@@ -1,8 +1,8 @@
-## Unity Notes Asset  
-
-#### Usage
+# Notes for Unity  
 
 ![](https://github.com/0x4d4147/readme-images/blob/master/NotesForUnity/noteforunity-with-colors.JPG?raw=true)  
+
+#### Usage  
 
 **1)** Add NotesBehaviour.cs to any GameObject in the scene and write your notes.  
 **2)** Go to "Window/Gather Notes" and click the "Refresh Notes" button to gather all notes in the scene.  
