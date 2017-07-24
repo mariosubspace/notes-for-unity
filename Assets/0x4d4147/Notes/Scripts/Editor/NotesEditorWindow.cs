@@ -1,14 +1,22 @@
 ﻿using UnityEngine;
 using UnityEditor;
-using UnityEditorInternal;
 using System.Collections.Generic;
+using System;
 
 public class NotesEditorWindow : EditorWindow
 {
-	NoteBehaviour[] notes;
+    Dictionary<NoteType, List<NoteBehaviour>> notes;
+    NoteType[] noteTypes;
 
 	Vector2 scrollPosition;
-	GUIStyle noteStyle;
+
+	GUIStyle memoNoteStyle;
+    GUIStyle todoNoteStyle;
+    GUIStyle bugNoteStyle;
+
+    bool isMemoNoteBoxOpen = true;
+    bool isTodoNoteBoxOpen = true;
+    bool isBugNoteBoxOpen = true;
 
 	[MenuItem("Window/Gather Notes")]
 	static void Init()
@@ -20,14 +28,43 @@ public class NotesEditorWindow : EditorWindow
 
 	void OnEnable()
 	{
-		noteStyle = new GUIStyle();
-		noteStyle.wordWrap = true;
-		noteStyle.padding = new RectOffset(10, 10, 5, 5);
-		noteStyle.richText = true;
-		noteStyle.normal.textColor = Color.white;
-	}
+        memoNoteStyle = ConstructNoteStyle(Color.white);
+        todoNoteStyle = ConstructNoteStyle(Color.white);
+        bugNoteStyle = ConstructNoteStyle(Color.white);
 
-	void OnGUI()
+        ConstructNoteDictionary();
+    }
+
+    GUIStyle ConstructNoteStyle(Color textColor)
+    {
+        GUIStyle style;
+        style = new GUIStyle();
+        style.wordWrap = true;
+        style.padding = new RectOffset(10, 10, 5, 5);
+        style.richText = true;
+        style.normal.textColor = textColor;
+        return style;
+    }
+
+    GUIStyle ConstructFoldoutStyle(Color textColor)
+    {
+        GUIStyle style;
+        style = new GUIStyle(EditorStyles.foldout);
+        style.normal.textColor = textColor;
+        return style;
+    }
+
+    void ConstructNoteDictionary()
+    {
+        notes = new Dictionary<NoteType, List<NoteBehaviour>>();
+        noteTypes = (NoteType[])Enum.GetValues(typeof(NoteType));
+        for (int i = 0; i < noteTypes.Length; ++i)
+        {
+            notes.Add(noteTypes[i], new List<NoteBehaviour>());
+        }
+    }
+
+    void OnGUI()
 	{
 		GUILayout.Space(18);
 
@@ -39,28 +76,74 @@ public class NotesEditorWindow : EditorWindow
 		GUILayout.Space(10);
 
 		scrollPosition = EditorGUILayout.BeginScrollView(scrollPosition);
-
-		if (notes != null)
+        
+		for (int i = 0; i < noteTypes.Length; ++i)
 		{
-			for (int i = 0; i < notes.Length; ++i)
-			{
-				EditorGUILayout.BeginHorizontal(EditorStyles.helpBox);
-				if (GUILayout.Button(notes[i].note, noteStyle)) 
-				{
-					Selection.activeObject = notes[i].gameObject;
-					EditorGUIUtility.PingObject(notes[i].gameObject);
-				}
-				EditorGUILayout.EndHorizontal();
-			}
+            GUILayout.Space(10);
+            DrawNoteBox(noteTypes[i]);
 		}
 
 		EditorGUILayout.EndScrollView();
 	}
 
+    void DrawNoteBox(NoteType noteType)
+    {
+        switch (noteType)
+        {
+            case NoteType.Memo:
+                {
+                    DrawNoteBox_Generic(noteType, ref isMemoNoteBoxOpen, "Memos", memoNoteStyle, Color.black);
+                    break;
+                }
+            case NoteType.ToDo:
+                {
+                    DrawNoteBox_Generic(noteType, ref isTodoNoteBoxOpen, "To Dos", todoNoteStyle, Color.blue);
+                    break;
+                }
+            case NoteType.Bug:
+                {
+                    DrawNoteBox_Generic(noteType, ref isBugNoteBoxOpen, "Bugs", bugNoteStyle, Color.red);
+                    break;
+                }
+        }
+    }
+    
+    void DrawNoteBox_Generic(NoteType noteType, ref bool isFoldoutOpen, string foldoutLabel, GUIStyle noteStyle, Color backgroundColor)
+    {
+        var notes = this.notes[noteType];
+
+        if (notes.Count == 0) return;
+
+        if (isFoldoutOpen = EditorGUILayout.Foldout(isFoldoutOpen, foldoutLabel))
+        {
+            GUI.backgroundColor = backgroundColor;
+            for (int i = 0; i < notes.Count; ++i)
+            {
+                EditorGUILayout.BeginHorizontal(EditorStyles.helpBox);
+                if (GUILayout.Button(notes[i].note, noteStyle))
+                {
+                    Selection.activeObject = notes[i].gameObject;
+                    EditorGUIUtility.PingObject(notes[i].gameObject);
+                }
+                EditorGUILayout.EndHorizontal();
+            }
+            GUI.backgroundColor = Color.white;
+        }
+    }
+
+    void ClearNotes()
+    {
+        foreach (var noteList in notes.Values)
+        {
+            noteList.Clear();
+        }
+    }
+
 	void GatherNotes()
 	{
-		List<NoteBehaviour> notes = new List<NoteBehaviour>();
-		GameObject[] gobs = UnityEngine.Object.FindObjectsOfType<GameObject>();
+        ClearNotes();
+
+		GameObject[] gobs = FindObjectsOfType<GameObject>();
 		foreach (var gob in gobs)
 		{
 			NoteBehaviour[] nbs = gob.GetComponents<NoteBehaviour>();
@@ -68,10 +151,9 @@ public class NotesEditorWindow : EditorWindow
 			{
 				foreach (var nb in nbs)
 				{
-					notes.Add(nb);
+                    notes[nb.type].Add(nb);
 				}
 			}
 		}
-		this.notes = notes.ToArray();
 	}
 }
